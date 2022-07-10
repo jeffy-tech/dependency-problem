@@ -1,14 +1,23 @@
-import { getDependency } from './dependency';
+import { getDependency } from './dependency/dependencyService';
 import express from 'express';
-/**
- * Bootstrap the application framework
- */
-export function createApp() {
-  const app = express();
+import bodyParser from "body-parser";
+import { RegisterRoutes } from "./tsoa-generated/routes";
 
-  app.use(express.json());
+export const app = express();
 
-  app.get('/dependency/:name/:version', getDependency);
+export const createApp = () => {
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  )
+  app.use(bodyParser.json())
 
-  return app;
+  RegisterRoutes(app)
+
+  return app
 }
+
+
+
+
