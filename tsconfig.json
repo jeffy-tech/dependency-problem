@@ -19,7 +19,10 @@
     // Build source maps for easier debugging
     "sourceMap": true,
 
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    // TSOA configs
+    "resolveJsonModule": true
   },
   "include": ["src"]
 }
