@@ -1,14 +1,30 @@
-import { getDependency } from './dependency';
-import express from 'express';
-/**
- * Bootstrap the application framework
- */
-export function createApp() {
-  const app = express();
+import express, { Response, Request }  from 'express';
+import bodyParser from "body-parser";
+import { RegisterRoutes } from "./tsoa-generated/routes";
+import swaggerUi from "swagger-ui-express";
 
-  app.use(express.json());
 
-  app.get('/dependency/:name/:version', getDependency);
+export const app = express();
 
-  return app;
+export const createApp = () => {
+  app.use("/docs", swaggerUi.serve, async (_req: Request, res: Response) => {
+    return res.send(
+      swaggerUi.generateHTML(await import("./tsoa-generated/swagger.json"))
+    );
+  });
+
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  )
+  app.use(bodyParser.json())
+
+  RegisterRoutes(app)
+
+  return app
 }
+
+
+
+

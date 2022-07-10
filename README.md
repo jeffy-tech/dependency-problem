@@ -22,7 +22,7 @@ To install dependencies and start the server in development mode:
 
 ```sh
 npm ci
-npm start
+npm run dev
 ```
 
 Then we can try the `/dependency` endpoint. Here is an example that uses `curl` and
@@ -30,6 +30,19 @@ Then we can try the `/dependency` endpoint. Here is an example that uses `curl` 
 
 ```sh
 curl -s http://localhost:3000/dependency/react/16.13.0 | jq .
+```
+
+### Alternative verification
+We can also use OpenAPI spec to generate Swagger endpoints. To review the documentation, visit [http://localhost:3000/docs](http://localhost:3000/docs).
+
+See: 
+- OpenAPI [https://www.openapis.org/](https://www.openapis.org/)
+- TSOA [https://github.com/lukeautry/tsoa](https://github.com/lukeautry/tsoa)
+
+To start the server in production mode, 
+```
+npm run build
+npm start
 ```
 
 Most of the code is boilerplate; the logic for the `/dependency` endpoint can be

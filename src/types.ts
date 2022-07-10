@@ -29,7 +29,7 @@ export interface NPMPackage {
   'dist-tags': {
     [tag: string]: string;
   };
-  versions: [];
+  versions: Array<string>;
   version: string;
   dependencies?: {
     [packageName: string]: string;

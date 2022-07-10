@@ -4,7 +4,7 @@ const DEFAULT_PORT = 3000;
 
 async function main() {
   // Initialise the server framework and routing
-  const server = createApp();
+  const server = createApp()
 
   server.listen(DEFAULT_PORT);
 
