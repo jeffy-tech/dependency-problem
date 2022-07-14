@@ -2,10 +2,10 @@
   "name": "dependency-problem",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsoa spec-and-routes && tsc",
-    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
+    "dev": "concurrently \"nodemon --watch src\" \"nodemon -x tsoa spec-and-routes\"",
     "start": "node --inspect -r source-map-support/register .",
     "test": "jest",
     "test:unit": "jest --verbose --roots ./test/unit",
@@ -53,5 +53,11 @@
   },
   "engines": {
     "node": ">=16.13.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*"
+    ],
+    "delay": 2500
   }
 }

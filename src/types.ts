@@ -35,3 +35,12 @@ export interface NPMPackage {
     [packageName: string]: string;
   };
 }
+
+export interface NPMPackageComparison extends NPMPackage {
+  dependencyDifferences: Array<unknown>
+}
+
+export interface NPMPackageParams {
+  name: string;
+  version: string;
+}
