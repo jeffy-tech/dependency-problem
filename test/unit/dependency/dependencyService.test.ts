@@ -1,4 +1,4 @@
-import { getDependency } from '../../src/dependency/dependencyService';
+import { getDependency } from '../../../src/dependency/dependencyService';
 
 describe('dependencyService', () => {
   it('should return the dependency name and version', async () => {
