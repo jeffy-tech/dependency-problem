@@ -1,5 +1,5 @@
-import _ from "lodash"
-import { Body, Controller, Get, Path, Post, Query, Route } from 'tsoa';
+import _ from 'lodash';
+import { Body, Controller, Get, Path, Post, Route } from 'tsoa';
 import { getDependency, getDependencyDifferences } from './dependencyService';
 import { NPMPackage, NPMPackageComparison, NPMPackageParams } from '../types';
 
@@ -21,9 +21,15 @@ export class DependencyController extends Controller {
   }
 
   @Post('/{name}/{version}')
-  public async getDependencyMismatches(@Path() name: string, @Path() version: string, @Body() otherPackages?: Array<NPMPackageParams>): Promise<NPMPackage | NPMPackageComparison | unknown> {
+  public async getDependencyMismatches(
+    @Path() name: string,
+    @Path() version: string,
+    @Body() otherPackages?: Array<NPMPackageParams>): Promise<NPMPackage | NPMPackageComparison | unknown> {
     try {
-      const data = _.isEmpty(otherPackages) ? await getDependency(name, version) : await getDependencyDifferences(name, version, otherPackages);
+      const data = _.isEmpty(otherPackages)
+        ? await getDependency(name, version)
+        : await getDependencyDifferences(name, version, otherPackages);
+
       if (data) {
         this.setStatus(200);
         return data;
