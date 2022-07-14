@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import _ from 'lodash'
-import { NPMPackage, NPMPackageComparison, NPMPackageParams } from '../types';
+import semverCompareRange from 'semver-compare-range'
+
+import { DependencyMismatch, NPMPackage, NPMPackageComparison, NPMPackageParams } from '../types';
 
 /**
  * Attempts to retrieve package data from the npm registry and return it
@@ -14,15 +16,27 @@ const getDependency = async (name: string, version: string): Promise<NPMPackage>
 /** 
  * Function will compare dependencies and returns an array
  * that will show mismatches
+ * 
+ * returns name, primaryVersion, siblingVersion when different
  */
-const compareDependencies = (pkg, sibling) => {
+const compareDependencies = (pkg, sibling): Array<DependencyMismatch> => {
   const otherKeys = Object.keys(sibling.dependencies!!)
 
-  return _.map(otherKeys, (key) => {
+  const differences = _.map(otherKeys, (key) => {
     const primaryDependencyValue = _.get(pkg.dependencies!!, key)
     const siblingDependencyValue = _.get(sibling.dependencies!!, key)
-    console.log({key, primary, sibling: _.get(sibling.dependencies!!, key)})
+
+    const rangeComparison = semverCompareRange(primaryDependencyValue, siblingDependencyValue)
+    switch (rangeComparison) {
+      case 1:
+      case -1:
+        console.log({ key, primaryVersion: primaryDependencyValue, siblingVersion: siblingDependencyValue })
+        return { name: key, primaryVersion: primaryDependencyValue, siblingVersion: siblingDependencyValue }
+      default:
+    }
   })
+
+  return _.compact(differences)
 }
 
 const getDependencyDifferences = async (name: string, version: string, otherPackages?: Array<NPMPackageParams>): Promise<NPMPackageComparison> => {
@@ -30,22 +44,14 @@ const getDependencyDifferences = async (name: string, version: string, otherPack
 
   const npmPackage = getDependency(name, version)
   const otherNpmPackages = _.map(otherPackages, ({ name, version }) => getDependency(name, version))
-  
+
   return Promise.all([npmPackage, ...otherNpmPackages]).then((res) => {
     const [primary, others] = [_.first(res), res.splice(1, res.length)]
 
-    const results = _.map(others, (sibling) => {
-      compareDependencies(primary, sibling)
-    })
-    // const primaryDeps = Object.keys(first.dependencies!!)
-    // _.map(Object.keys(others.dependencies), (dependentKey) => {
-    //   if (primaryDeps.includes(dependentKey)) {
-    //     const primarySemver = first.dependencies[dependentKey]
-    //   }
-    // })
+    const results = _.flattenDeep(_.map(others, (sibling) => compareDependencies(primary, sibling)))
 
-    return { ...primary, ...{ dependencyDifferences} }
+    return { ...primary, ...{ dependencyDifferences: results } }
   })
 }
-  
+
 export { getDependency, getDependencyDifferences };

@@ -44,3 +44,9 @@ export interface NPMPackageParams {
   name: string;
   version: string;
 }
+
+export interface DependencyMismatch {
+  name: string;
+  primaryVersion: string;
+  siblingVersion: string
+}

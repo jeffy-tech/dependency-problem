@@ -42,14 +42,25 @@ describe('dependencyController', () => {
   })
   
   describe('POST', () => {
-    it('adds conflicts when passed additional packages that have different dependencies', async () => {
+    it('adds no conflicts when passed additional packages that don\'t have different dependencies', async () => {
       const packageName = 'react';
       const packageVersion = '16.13.0';
   
       const otherPackages: Array<NPMPackageParams> = [{name: 'react', version: "17.0.0"}]
       const result = await axios.post(`http://localhost:${port}/dependency/${packageName}/${packageVersion}`, otherPackages);
 
+      expect(result.data.dependencyDifferences.length).toBe(0)
+    })
+
+    it('adds conflicts when passed additional packages that do have different dependencies', async () => {
+      const packageName = 'react';
+      const packageVersion = '16.13.0';
+  
+      const otherPackages: Array<NPMPackageParams> = [{name: 'react', version: "15.0.0"}]
+      const result = await axios.post(`http://localhost:${port}/dependency/${packageName}/${packageVersion}`, otherPackages);
+
       expect(result.data.dependencyDifferences.length).toBe(1)
     })
+
   })
 });
