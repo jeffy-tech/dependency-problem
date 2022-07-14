@@ -1,29 +1,20 @@
-import axios from 'axios';
-import { Server } from 'http';
-import { createApp } from '../src/app';
+import request from 'supertest';
+import app from '../src/app';
 
 describe('/package/:name/:version endpoint', () => {
-  let server: Server;
-  let port: number;
+  const packageName = 'react';
+  const packageVersion = '16.13.0';
 
-  beforeAll(async () => {
-    port = 3000
-    server = createApp().listen(port);
+  it('responds 200 status code if found', async () => {
+    const response = await request(app).get(`/dependency/${packageName}/${packageVersion}`);
+    expect(response.statusCode).toBe(200);
   });
 
-  afterAll((done) => {
-    server.close(done);
-  });
-
-  it('responds', async () => {
-    const packageName = 'react';
-    const packageVersion = '16.13.0';
-
-    const res: any = (await axios(
-      `http://localhost:${port}/dependency/${packageName}/${packageVersion}`,
-    )).data;
-
-    expect(res.name).toEqual(packageName);
-    expect(res.version).toEqual(packageVersion);
+  it('responds with proper name/version/dependencies', async () => {
+    const { body } = await request(app).get(`/dependency/${packageName}/${packageVersion}`);
+    expect(body.name).toEqual(packageName);
+    expect(body.version).toEqual(packageVersion);
+    expect(body.dependencies).toBeDefined();
+    expect(Object.keys(body.dependencies).length).toBe(3);
   });
 });
