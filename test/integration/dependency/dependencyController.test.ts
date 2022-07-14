@@ -12,7 +12,6 @@ describe('/package/:name/:version endpoint', () => {
   });
 
   afterAll((done) => {
-    server.removeAllListeners();
     server.close(done);
   });
 

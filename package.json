@@ -11,7 +11,7 @@
     "test:unit": "jest --verbose --roots ./test/unit",
     "test:integration": "jest --roots ./test/integration",
     "format": "npx prettier --write .",
-    "lint": "eslint --cache '{src,test}/**/*.ts'"
+    "lint": "eslint \"./src/**\" --ignore-pattern \"src/tsoa-generated/*\""
   },
   "repository": {
     "type": "git",
