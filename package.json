@@ -8,8 +8,8 @@
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
     "start": "node --inspect -r source-map-support/register .",
     "test": "jest",
-    "test:unit": "jest --roots test/",
-    "test:integration": "jest --roots integration",
+    "test:unit": "jest --verbose --roots ./test/unit",
+    "test:integration": "jest --roots ./test/integration",
     "format": "npx prettier --write .",
     "lint": "eslint --cache '{src,test}/**/*.ts'"
   },

@@ -7,11 +7,12 @@ describe('/package/:name/:version endpoint', () => {
   let port: number;
 
   beforeAll(async () => {
-    port = 3000
+    port = 3000;
     server = app.listen(port);
   });
 
   afterAll((done) => {
+    server.removeAllListeners();
     server.close(done);
   });
 
@@ -19,11 +20,9 @@ describe('/package/:name/:version endpoint', () => {
     const packageName = 'react';
     const packageVersion = '16.13.0';
 
-    const res: any = (await axios(
-      `http://localhost:${port}/dependency/${packageName}/${packageVersion}`,
-    )).data;
+    const { data } = await axios(`http://localhost:${port}/dependency/${packageName}/${packageVersion}`);
 
-    expect(res.name).toEqual(packageName);
-    expect(res.version).toEqual(packageVersion);
+    expect(data.name).toEqual(packageName);
+    expect(data.version).toEqual(packageVersion);
   });
 });
