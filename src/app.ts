@@ -12,7 +12,7 @@ app.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => {
 app.use(
   bodyParser.urlencoded({
     extended: true,
-  })
+  }),
 );
 app.use(bodyParser.json());
 
